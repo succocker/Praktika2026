@@ -44,3 +44,18 @@ git reset --hard <hash>
 
 ### What I learned
 Научился находить потерянные коммиты через reflog и восстанавливать их с помощью reset --hard.
+
+
+
+## Task 50 — git bisect
+### Commands
+git bisect start
+git bisect bad
+git bisect good <hash>
+git bisect reset
+
+### Output
+(Вставьте сюда строчку, которую Git вывел при нахождении плохого коммита, например: "<hash> is the first bad commit")
+
+### What I learned
+Научился использовать git bisect для бинарного поиска сломанного коммита в истории.
