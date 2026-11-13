@@ -25,3 +25,22 @@ git stash pop
 
 ### What I learned
 Научился прятать незакоммиченные изменения в stash и возвращать их обратно.
+
+
+
+
+## Task 49 — reflog
+### Commands
+git commit --allow-empty -m "feat: commit to be lost and found"
+git reset --hard HEAD~1
+git reflog
+git reset --hard <hash>
+
+### Output (git reflog)
+(Вставьте сюда вывод команды git reflog, где видно ваш потерянный коммит)
+
+### Output (git log после восстановления)
+(Вставьте сюда вывод git log --oneline -1 после восстановления)
+
+### What I learned
+Научился находить потерянные коммиты через reflog и восстанавливать их с помощью reset --hard.
