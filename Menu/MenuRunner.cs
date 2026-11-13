@@ -51,6 +51,23 @@ public class MenuRunner
         _level2Tasks.Add(new Task33_EmployeesLinq());
         _level2Tasks.Add(new Task34_GrupirSlov());
 
+
+
+        _level3Tasks.Add(new Task36_Duplicates());
+        _level3Tasks.Add(new Task37_FibonacciMemo());
+        _level3Tasks.Add(new Task38_ListVsLinkedList());
+        _level3Tasks.Add(new Task39_YieldReturn());
+        _level3Tasks.Add(new Task40_AsyncExceptions());
+        _level3Tasks.Add(new Task41_TaskWhenAll());
+        _level3Tasks.Add(new Task42_Cancellation());
+        _level3Tasks.Add(new Task43_Task43_ExceptionOrder());
+        _level3Tasks.Add(new Task44_GrupirSlov());
+        _level3Tasks.Add(new Task45_GrupirSlov());
+        _level3Tasks.Add(new Task46_GrupirSlov());
+        _level3Tasks.Add(new Task47_GrupirSlov());
+        _level3Tasks.Add(new Task48_GrupirSlov());
+        _level3Tasks.Add(new Task49_GrupirSlov());
+
     }
 
     public void Run()
