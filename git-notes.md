@@ -10,3 +10,18 @@
 * | bb09fab docs: edit readme in main
 |/
 * 2ec481a docs: add readme in main
+
+## Task 46 — git stash
+### Commands
+git stash
+git stash list
+git stash pop
+
+### Output (до pop)
+(вставьте вывод из шага 3)
+
+### Output (после pop)
+(пусто)
+
+### What I learned
+Научился прятать незакоммиченные изменения в stash и возвращать их обратно.
