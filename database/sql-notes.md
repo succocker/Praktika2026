@@ -522,5 +522,90 @@ END CATCH;
 ### Результат
 Зарплаты успешно обновлены.
 
+## Task 28 — Интеграция с C#: SELECT
+### Задача
+Подключиться к базе данных из C# и вывести список сотрудников.
 
+### Код C# (Task28_CSharpSql.cs)
+csharp
+using System;
+using Microsoft.Data.SqlClient;
 
+string connStr = Environment.GetEnvironmentVariable("PRACTICE_DB_CONNECTION");
+using var connection = new SqlConnection(connStr);
+connection.Open();
+using var cmd = new SqlCommand("SELECT EmployeeName, Salary FROM Employees", connection);
+using var reader = cmd.ExecuteReader();
+
+while (reader.Read())
+{
+    Console.WriteLine($"{reader.GetString(0)}: {reader.GetDecimal(1)} руб.");
+}
+### Результат выполнения
+Сотрудники:
+Анна Иванова: 65000,00 руб.
+Пётр Сидоров: 72000,00 руб.
+Мария Кузнецова: 55000,00 руб.
+Иван Петров: 48000,00 руб.
+Ольга Смирнова: 61000,00 руб.
+Дмитрий Орлов: 58000,00 руб.
+Елена Волкова: 52000,00 руб.
+Сергей Морозов: 45000,00 руб.
+Наталья Соколова: 43000,00 руб.
+Алексей Лебедев: 90000,00 руб.
+
+## Task 29 — Интеграция с C#: INSERT
+### Задача
+Добавить нового сотрудника или отдел из C#.
+
+### Код C# (Task28_CSharpSql.cs)
+csharp
+string query = "INSERT INTO Departments (DepartmentName) VALUES (@Name)";
+using var cmd = new SqlCommand(query, connection);
+cmd.Parameters.AddWithValue("@Name", "Новый отдел (из C#)");
+
+int rowsAffected = cmd.ExecuteNonQuery();
+Console.WriteLine($"Успешно! Добавлено строк: {rowsAffected}");
+
+### Результат выполнения
+Успешно! Добавлено строк: 1
+
+## Task 30 — Интеграция с C#: Отчёт (JOIN)
+### Задача
+Вывести красивый текстовый отчет с объединением таблиц (сотрудники и отделы).
+
+### Код C# (Task28_CSharpSql.cs)
+csharp
+string query = @"
+    SELECT e.EmployeeName, d.DepartmentName, e.Salary 
+    FROM Employees e
+    INNER JOIN Departments d ON e.DepartmentId = d.DepartmentId
+    ORDER BY d.DepartmentName, e.Salary DESC";
+
+using var cmd = new SqlCommand(query, connection);
+using var reader = cmd.ExecuteReader();
+
+while (reader.Read())
+{
+    string name = reader.GetString(0);
+    string dept = reader.GetString(1);
+    decimal salary = reader.GetDecimal(2);
+    Console.WriteLine($"{name,-20} | {dept,-15} | {salary,10:F2}");
+}
+
+### Результат выполнения
+==================================================
+ОТЧЕТ ПО СОТРУДНИКАМ
+==================================================
+Сотрудник            | Отдел           |   Зарплата
+----------------------------------------------------
+Ольга Смирнова       | Аналитика       |   61000,00
+Дмитрий Орлов        | Аналитика       |   58000,00
+Елена Волкова        | Аналитика       |   52000,00
+Алексей Лебедев      | Менеджмент      |   90000,00
+Пётр Сидоров         | Разработка      |   72000,00
+Анна Иванова         | Разработка      |   65000,00
+Мария Кузнецова      | Разработка      |   55000,00
+Иван Петров          | Разработка      |   48000,00
+Сергей Морозов       | Тестирование    |   45000,00
+Наталья Соколова     | Тестирование    |   43000,00
