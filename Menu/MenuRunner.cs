@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using CSharpPraktikum.Common;
 using CSharpPraktikum.Tasks.Level1;
 using CSharpPraktikum.Tasks.Level2;
+using CSharpPraktikum.Tasks.Level3; // <--- ОБЯЗАТЕЛЬНО ДЛЯ 3-ГО УРОВНЯ
+
 namespace CSharpPraktikum.Menu;
 
 public class MenuRunner
 {
     private readonly List<ITask> _level1Tasks = new();
     private readonly List<ITask> _level2Tasks = new();
+    private readonly List<ITask> _level3Tasks = new(); // <--- ДОБАВЛЕН СПИСОК 3 УРОВНЯ
 
     public MenuRunner()
     {
-   
+        // === УРОВЕНЬ 1 ===
         _level1Tasks.Add(new Task01_HelloWorld());
         _level1Tasks.Add(new Task02_PerPrimTip());
         _level1Tasks.Add(new Task03_Calculator());
@@ -28,9 +31,7 @@ public class MenuRunner
         _level1Tasks.Add(new Task13_Dictionary());
         _level1Tasks.Add(new Task14_Age());
 
-
-
-
+        // === УРОВЕНЬ 2 ===
         _level2Tasks.Add(new Task16_StringExtensions());
         _level2Tasks.Add(new Task17_Concat());
         _level2Tasks.Add(new Task18_TryParseVsTryCatch());
@@ -51,8 +52,7 @@ public class MenuRunner
         _level2Tasks.Add(new Task33_EmployeesLinq());
         _level2Tasks.Add(new Task34_GrupirSlov());
 
-
-
+        // === УРОВЕНЬ 3 (Названия взяты с вашего скриншота) ===
         _level3Tasks.Add(new Task36_Duplicates());
         _level3Tasks.Add(new Task37_FibonacciMemo());
         _level3Tasks.Add(new Task38_ListVsLinkedList());
@@ -60,14 +60,14 @@ public class MenuRunner
         _level3Tasks.Add(new Task40_AsyncExceptions());
         _level3Tasks.Add(new Task41_TaskWhenAll());
         _level3Tasks.Add(new Task42_Cancellation());
-        _level3Tasks.Add(new Task43_Task43_ExceptionOrder());
-        _level3Tasks.Add(new Task44_GrupirSlov());
-        _level3Tasks.Add(new Task45_GrupirSlov());
-        _level3Tasks.Add(new Task46_GrupirSlov());
-        _level3Tasks.Add(new Task47_GrupirSlov());
-        _level3Tasks.Add(new Task48_GrupirSlov());
-        _level3Tasks.Add(new Task49_GrupirSlov());
+        _level3Tasks.Add(new Task43_ExceptionOrder()); // Исправил двойное имя
+        _level3Tasks.Add(new Task44_TodoJson());       // Исправил GrupirSlov на TodoJson
+        _level3Tasks.Add(new Task45_Library());        // Исправил GrupirSlov на Library
 
+        // Задания по Базе Данных (они тоже лежат в Level3)
+        _level3Tasks.Add(new Task28_CSharpSql());
+        _level3Tasks.Add(new Task29_CSharpInsert());
+        _level3Tasks.Add(new Task30_CSharpReport());
     }
 
     public void Run()
@@ -87,10 +87,13 @@ public class MenuRunner
             switch (input)
             {
                 case "1":
-                    ShowLevel1Menu(); 
+                    ShowLevel1Menu();
                     break;
                 case "2":
-                    ShowLevel2Menu(); 
+                    ShowLevel2Menu();
+                    break;
+                case "3":
+                    ShowLevel3Menu(); // <--- ДОБАВЛЕН ВЫЗОВ МЕНЮ 3 УРОВНЯ
                     break;
                 case "4":
                     return;
@@ -109,7 +112,6 @@ public class MenuRunner
             Console.Clear();
             Console.WriteLine("--- Уровень 1: Базовый ---");
 
-          
             for (int i = 0; i < _level1Tasks.Count; i++)
             {
                 Console.WriteLine(_level1Tasks[i].Title);
@@ -120,10 +122,8 @@ public class MenuRunner
 
             string? input = Console.ReadLine();
 
-            if (input == "0")
-                return; 
+            if (input == "0") return;
 
-         
             if (int.TryParse(input, out int taskNumber) && taskNumber >= 1 && taskNumber <= _level1Tasks.Count)
             {
                 RunTask(_level1Tasks[taskNumber - 1]);
@@ -135,6 +135,7 @@ public class MenuRunner
             }
         }
     }
+
     private void ShowLevel2Menu()
     {
         while (true)
@@ -144,7 +145,6 @@ public class MenuRunner
 
             for (int i = 0; i < _level2Tasks.Count; i++)
             {
-              
                 Console.WriteLine($"{i + 16}. {_level2Tasks[i].Title}");
             }
 
@@ -153,15 +153,12 @@ public class MenuRunner
 
             string? input = Console.ReadLine();
 
-            if (input == "0")
-                return;
+            if (input == "0") return;
 
-            
             if (int.TryParse(input, out int taskNumber)
                 && taskNumber >= 16
                 && taskNumber <= 15 + _level2Tasks.Count)
             {
-            
                 RunTask(_level2Tasks[taskNumber - 16]);
             }
             else
@@ -171,7 +168,43 @@ public class MenuRunner
             }
         }
     }
-    
+
+    // <--- ДОБАВЛЕН МЕТОД ДЛЯ 3 УРОВНЯ --->
+    private void ShowLevel3Menu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("--- Уровень 3: Продвинутый ---");
+
+            for (int i = 0; i < _level3Tasks.Count; i++)
+            {
+                // Выводим номера, начиная с 36
+                Console.WriteLine($"{i + 36}. {_level3Tasks[i].Title}");
+            }
+
+            Console.WriteLine("0. Назад");
+            Console.Write("\nВыберите задание: ");
+
+            string? input = Console.ReadLine();
+
+            if (input == "0") return;
+
+            // Проверка на диапазон 36...50
+            if (int.TryParse(input, out int taskNumber)
+                && taskNumber >= 36
+                && taskNumber <= 35 + _level3Tasks.Count)
+            {
+                RunTask(_level3Tasks[taskNumber - 36]);
+            }
+            else
+            {
+                Console.WriteLine("Неверный номер задания. Нажмите Enter...");
+                Console.ReadLine();
+            }
+        }
+    }
+
     private void RunTask(ITask task)
     {
         Console.Clear();

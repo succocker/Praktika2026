@@ -27,30 +27,31 @@ public class Task42_Cancellation : ITask
         Console.WriteLine("Запускаем долгую операцию (всего 10 шагов по 0.5 сек = 5 сек)...");
         Console.WriteLine("Операция будет отменена через 2 секунды.\n");
 
-    
-        using CancellationTokenSource cts = new CancellationTokenSource();
 
-)
-        cts.CancelAfter(2000);
+        using (CancellationTokenSource cts = new CancellationTokenSource())
+        {
 
-        try
-        {
-     
-            await LongOperationAsync(cts.Token);
-            Console.WriteLine("Операция успешно завершена!");
-        }
-        catch (OperationCanceledException)
-        {
-         
-            Console.WriteLine("\n[ОПЕРАЦИЯ ОТМЕНЕНА] Пользователь прервал скачивание.");
-        }
+            cts.CancelAfter(2000);
+
+            try
+            {
+                
+                await LongOperationAsync(cts.Token);
+                Console.WriteLine("Операция успешно завершена!");
+            }
+            catch (OperationCanceledException)
+            {
+                
+                Console.WriteLine("\n[ОПЕРАЦИЯ ОТМЕНЕНА] Пользователь прервал скачивание.");
+            }
+        } 
     }
 
     private async Task LongOperationAsync(CancellationToken token)
     {
         for (int i = 1; i <= 10; i++)
         {
-  
+           
             token.ThrowIfCancellationRequested();
 
             Console.WriteLine($"Шаг {i}/10 выполнен...");

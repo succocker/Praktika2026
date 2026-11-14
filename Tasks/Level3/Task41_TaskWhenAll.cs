@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CSharpPraktikum.Common;
 
 namespace CSharpPraktikum.Tasks.Level3;
->
+
 public class Task41_TaskWhenAll : ITask
 {
     public string Title => "Task.WhenAll — параллельно 10 задач";
