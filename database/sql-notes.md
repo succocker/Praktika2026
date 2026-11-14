@@ -558,7 +558,7 @@ while (reader.Read())
 ### Задача
 Добавить нового сотрудника или отдел из C#.
 
-### Код C# (Task28_CSharpSql.cs)
+### Код C# (Task29_CSharpInsert.cs)
 csharp
 string query = "INSERT INTO Departments (DepartmentName) VALUES (@Name)";
 using var cmd = new SqlCommand(query, connection);
@@ -574,7 +574,7 @@ Console.WriteLine($"Успешно! Добавлено строк: {rowsAffected
 ### Задача
 Вывести красивый текстовый отчет с объединением таблиц (сотрудники и отделы).
 
-### Код C# (Task28_CSharpSql.cs)
+### Код C# (Task30_CSharpReport.cs)
 csharp
 string query = @"
     SELECT e.EmployeeName, d.DepartmentName, e.Salary 
