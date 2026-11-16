@@ -18,8 +18,12 @@ public class Task30_CSharpReport : ITask
 
     private async Task RunAsync()
     {
-        string connStr = Environment.GetEnvironmentVariable("PRACTICE_DB_CONNECTION")
-                         ?? throw new Exception("Переменная PRACTICE_DB_CONNECTION не найдена!");
+        string? connStr = Environment.GetEnvironmentVariable("PRACTICE_DB_CONNECTION");
+        if (string.IsNullOrEmpty(connStr))
+        {
+            Console.WriteLine("Ошибка: переменная PRACTICE_DB_CONNECTION не задана!");
+            return;
+        }
         try
         {
             using var connection = new SqlConnection(connStr);

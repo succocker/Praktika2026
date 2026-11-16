@@ -1,6 +1,118 @@
 # SQL notes
 > Учебная БД: PracticeDB. Скрипт создания — `init.sql`.
 
+## Task 01 — Создание базы и таблиц
+### SQL
+sql
+CREATE DATABASE PracticeDB;
+GO
+USE PracticeDB;
+GO
+CREATE TABLE Departments (
+    DepartmentId   INT PRIMARY KEY IDENTITY(1,1),
+    DepartmentName NVARCHAR(100) NOT NULL
+);
+CREATE TABLE Employees (
+    EmployeeId   INT PRIMARY KEY IDENTITY(1,1),
+    EmployeeName NVARCHAR(100) NOT NULL,
+    Salary       DECIMAL(10,2) NOT NULL,
+    HireDate     DATE NOT NULL,
+    DepartmentId INT NOT NULL,
+    ManagerId    INT NULL,
+    CONSTRAINT FK_Employees_Departments FOREIGN KEY (DepartmentId) REFERENCES Departments(DepartmentId),
+    CONSTRAINT FK_Employees_Manager FOREIGN KEY (ManagerId) REFERENCES Employees(EmployeeId)
+);
+CREATE TABLE Projects (
+    ProjectId   INT PRIMARY KEY IDENTITY(1,1),
+    ProjectName NVARCHAR(100) NOT NULL,
+    StartDate   DATE NOT NULL
+);
+CREATE TABLE EmployeeProjects (
+    EmployeeId INT NOT NULL,
+    ProjectId  INT NOT NULL,
+    Hours      INT NOT NULL DEFAULT 0,
+    CONSTRAINT PK_EmployeeProjects PRIMARY KEY (EmployeeId, ProjectId),
+    CONSTRAINT FK_EP_Employees FOREIGN KEY (EmployeeId) REFERENCES Employees(EmployeeId),
+    CONSTRAINT FK_EP_Projects  FOREIGN KEY (ProjectId)  REFERENCES Projects(ProjectId)
+);
+### Результат
+Все 4 таблицы успешно созданы. Связи между ними настроены.
+
+### Вывод
+База данных создана, структура таблиц соответствует требованиям задания.
+
+### Task 02 — INSERT: заполнение данными
+Данные вставлены
+### Результат
+Данные успешно добавлены. SELECT COUNT(*) показывает 4 отдела, 10 сотрудников, 5 проектов и 14 назначений.
+
+### Вывод
+База заполнена тестовыми данными, готовыми для выполнения запросов.
+
+
+### Task 04 — ORDER BY + TOP
+
+
+SELECT TOP 3 EmployeeName, Salary 
+FROM Employees 
+ORDER BY Salary DESC;
+
+
+SELECT TOP 5 EmployeeName, HireDate 
+FROM Employees 
+ORDER BY HireDate ASC;
+
+SELECT EmployeeName, DepartmentId, Salary 
+FROM Employees 
+ORDER BY DepartmentId ASC, Salary DESC;
+### Результат
+Алексей Лебедев	95000.00
+Анна Иванова	86500.00
+Пётр Сидоров	84200.00
+
+Алексей Лебедев	2018-05-25
+Пётр Сидоров	2019-07-01
+Анна Иванова	2020-03-15
+Ольга Смирнова	2020-09-05
+Мария Кузнецова	2021-11-20
+
+
+Анна Иванова	1	86500.00
+Пётр Сидоров	1	84200.00
+Мария Кузнецова	1	65500.00
+Иван Тестов	1	60000.00
+Иван Петров	1	52800.00
+Ольга Смирнова	2	66000.00
+Дмитрий Орлов	2	58000.00
+Елена Волкова	2	52000.00
+Сергей Морозов	3	50000.00
+Алексей Лебедев	4	95000.00
+
+### Вывод
+Операторы ORDER BY и TOP позволяют сортировать данные и ограничивать количество выводимых строк.
+
+
+### Task 05 — Агрегация: COUNT, SUM, AVG, MIN, MAX
+
+SELECT COUNT(*) AS TotalEmployees FROM Employees;
+SELECT SUM(Salary) AS TotalSalary FROM Employees;
+SELECT ROUND(AVG(Salary), 2) AS AvgSalary FROM Employees;
+SELECT MIN(Salary) AS MinSalary, MAX(Salary) AS MaxSalary FROM Employees;
+SELECT COUNT(*) AS RichEmployees FROM Employees WHERE Salary > 50000;
+
+### Результат
+10
+
+670000.00
+
+67000.000000
+
+50000.00	95000.00
+
+9
+### Вывод
+Агрегатные функции используются для вычисления статистических показателей по всей таблице.
+
 ## Task 03 — SELECT + WHERE
 ### Запрос 1: Сотрудники с зарплатой > 50000
 SELECT EmployeeName, Salary 
@@ -421,19 +533,22 @@ GO
 ## Task 20 —  Индексы: создание и анализ
 ### SQL
 
+SET STATISTICS IO ON;
+SELECT * FROM Employees WHERE DepartmentId = 1 AND Salary > 50000;
+
+
 CREATE INDEX IX_Employees_DepartmentId ON Employees(DepartmentId);
 CREATE INDEX IX_Employees_Salary ON Employees(Salary);
 
 
 SET STATISTICS IO ON;
-
-
 SELECT * FROM Employees WHERE DepartmentId = 1 AND Salary > 50000;
 ### Результат
-1	Анна Иванова	86500.00	2020-03-15	1	NULL
-2	Пётр Сидоров	84200.00	2019-07-01	1	NULL
-3	Мария Кузнецова	65500.00	2021-11-20	1	2
-4	Иван Петров	52800.00	2023-03-01	1	1
+Было:
+Table 'Employees'. Scan count 1, logical reads 2, physical reads 1, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.
+Стало:
+Table 'Employees'. Scan count 1, logical reads 2, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.
+
 ### Вывод
 если посмотреть на вкладку "сообщения", то можно увидеть строку "logical reads". после создания индексов это число должно уменьшится.
 
